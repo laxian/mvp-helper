@@ -1,43 +1,47 @@
+# 代码自动生成框架MVP helper
 # MVP helper
 
->之前写过一个auto-mvp项目，和这个是一样的东东，只不过之前的代码太具体，难以移植。我在两个项目中使用，但是这两个项目创建的
+>之前写过一个[auto-mvp](https://github.com/laxian/auto-mvp)项目，和这个是一样的东东，只不过之前的代码太具体，难以移植。我在两个项目中使用，但是这两个项目创建的
 时间不同，虽然都是MVP结构，但是差异挺大，导致mvp一直到另一个上，相当于重写了一套。所以，我将与具体细节无关的操作提取了出来
 对于一个项目，花一点点时间配置一下，能节省不少时间
 
 + 思路
 
-    对于一些有规律的代码，根据事先准备好的模板，***替换***其中的变量，生成代码。
-    生成的代码，或者需要***插入***某些文件中的指定位置，或者需要***生成文件***并写入
+    对于一些有规律的代码，根据事先准备好的模板，**替换**其中的变量，生成代码。
+    生成的代码，或者需要**插入**某些文件中的指定位置，或者需要**生成文件**并写入
 
-+ 实现
 
-    + 替换
-        实现class Api 中的两个方法
+* 替换
 
-        `class Api(object):
+    实现class Api 中的两个方法
 
-            def __init__(self):
-                pass
+```
+	class Api(object):
 
-            @abc.abstractclassmethod
-            def holder_list(self):
-                pass
+	            def __init__(self):
+	                pass
 
-            @abc.abstractclassmethod
-            def key_list(self):
-                pass`
-           `
+	            @abc.abstractclassmethod
+	            def holder_list(self):
+	                pass
 
-    + 插入
-        通过正则表达式匹配插入代码的开始行，通过'{'和'}'对查找当前代码块结束的行，并在结束行前插入代码
-        代码插入前代码重复判断，如果当前行已存在，跳过
+	            @abc.abstractclassmethod
+	            def key_list(self):
+	                pass
+```
 
-    + 配置文件
-    1. api配置文件
+* 插入
+       通过正则表达式匹配插入代码的开始行，通过'{'和'}'对查找当前代码块结束的行，并在结束行前插入代码
+       代码插入前代码重复判断，如果当前行已存在，跳过
 
-        声明了api的一些基本信息
+* 配置文件
 
-        ```[
++ api配置文件
+
+	   声明了api的一些基本信息
+
+```
+[
              {
                "method": "get",
                "path": "t",
@@ -69,20 +73,22 @@
              }
            ]
 
+```
 
-    2. 操作配置
++  操作配置
 
-        root_project    项目根目录
-        tasks:          对于每一个api，进行的操作
-            path:       需要插入或者创建的文件，路径中的关键字会被替换
-            create_if_not_exists:   如果文件不存在，是否创建
-            template:               如果文件不存在，create_if_not_exists 为true，则根据模板创建文件，模板中的关键字会被替换
-            inserts                 插入列表，每一项代表一个插入点，可能插入多行。插入位置在当前代码块结束'}'前一行
-                regex:              正则表达式，匹配插入代码块开始位置
-                lines:              需要插入的行，行中的关键字会被替换
+   root_project    项目根目录
+   tasks:          对于每一个api，进行的操作
+       path:       需要插入或者创建的文件，路径中的关键字会被替换
+       create_if_not_exists:   如果文件不存在，是否创建
+       template:               如果文件不存在，create_if_not_exists 为true，则根据模板创建文件，模板中的关键字会被替换
+       inserts                 插入列表，每一项代表一个插入点，可能插入多行。插入位置在当前代码块结束'}'前一行
+           regex:              正则表达式，匹配插入代码块开始位置
+           lines:              需要插入的行，行中的关键字会被替换
 
 
-    ```{
+```
+{
          "project_root": "/Users/leochou/StudioProjects/DywTeacher/",
          "tasks": [
            {
@@ -180,3 +186,4 @@
            }
          ]
        }
+```
