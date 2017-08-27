@@ -1,0 +1,98 @@
+{
+  "project_root": "/Users/leochou/StudioProjects/DywTeacher/",
+  "tasks": [
+    {
+      "path": "app/src/main/java/com/etiantian/dywteacher/ui/teach/{page}/{Alias}Contract.java",
+      "create_if_not_exists": true,
+      "template": "/Users/leochou/PycharmProjects/mvp-helper/template/SampleContract.java",
+      "inserts": [
+        {
+          "regex": " *interface Model extends IBaseModel \\{\n",
+          "lines": [
+            {
+              "line": "\t\tObservable<Result<{Bean}>> {apiName}({TypedParams});\n"
+            }
+          ]
+        },
+        {
+          "regex": " *interface View extends IBaseView \\{\n",
+          "lines": [
+            {
+              "line": "\t\tvoid on{ApiName}Success({Bean} data);\n"
+            }
+          ]
+        },
+        {
+          "regex": " *abstract class Presenter extends BasePresenter<Model, View> \\{\n",
+          "lines": [
+            {
+              "line": "\t\tabstract void {apiName}({TypedParams});\n"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "app/src/main/java/com/etiantian/dywteacher/ui/teach/{page}/{Alias}Model.java",
+      "create_if_not_exists": true,
+      "template": "/Users/leochou/PycharmProjects/mvp-helper/template/SampleModel.java",
+      "inserts": [
+        {
+          "regex": "public class .+?Contract.Model \\{\n",
+          "lines": [
+            {
+              "line": "\n    @Override\n    public Observable<Result<{Bean}>> {apiName}({TypedParams}) {\n        return Networks.getInstance().getCommonApi()\n                .{apiName}(getParams(Constants.Http.KEY_{API_NAME}\n                        {ParamsPair})).compose(RxSchedulerHelper.<Result<{Bean}>>io_main());\n    }\n"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "app/src/main/java/com/etiantian/dywteacher/ui/teach/{page}/{Alias}Presenter.java",
+      "create_if_not_exists": true,
+      "template": "/Users/leochou/PycharmProjects/mvp-helper/template/SamplePresenter.java",
+      "inserts": [
+        {
+          "regex": "public class .+?Contract.Presenter \\{\n",
+          "lines": [
+            {
+              "line": "    \n    @Override\n    void {apiName}({TypedParams}) {\n        mRxManager.add(mModel.{apiName}({params})\n                .map(new RxFunc.ServerResultFunc<{Bean}>())\n                .onErrorResumeNext(new RxFunc.HttpResultFunc<{Bean}>())\n                .subscribe(new FilterSubscriber<{Bean}>(mView) {\n\n                    @Override\n                    public void onNext({Bean} data) {\n                        mView.on{ApiName}Success(data);\n                    }\n                }));\n    }\n"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "app/src/main/java/com/etiantian/dywteacher/api/CommonApi.java",
+      "inserts": [
+        {
+          "regex": "public interface CommonApi {",
+          "lines": [
+            {
+              "line": "\n\t@{METHOD}(Constants.Http.URL_{API_NAME})\n    Observable<Result<{Bean}>> {apiName}({retrofitParams});\n"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "path": "app/src/main/java/com/etiantian/dywteacher/global/Constants.java",
+      "inserts": [
+        {
+          "regex": " *public interface Http \\{",
+          "lines": [
+            {
+              "line": "\n\t\tString {PATH} = \"{path}/\";\n"
+            },
+            {
+              "line": "\n\t\tString KEY_{API_NAME} = \"{apiName}.do\";\n"
+            },
+            {
+              "line": "\t\tString URL_{API_NAME} = {PATH} + KEY_{API_NAME};\n"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

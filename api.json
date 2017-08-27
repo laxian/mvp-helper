@@ -1,0 +1,31 @@
+[
+  {
+    "method": "get",
+    "path": "t",
+    "apiName": "modifyTeacherInfo",
+    "bean": "GetTeacherSignatureData",
+    "page": "classinfo",
+    "parent": "teach",
+    "params": {
+      "userId": "int",
+      "pageNum": "int",
+      "pageSize": "int",
+      "time": "long",
+      "sign": "String"
+    }
+  },
+  {
+    "method": "post",
+    "path": "t",
+    "apiName": "getTeacherInfo",
+    "bean": "GetTeacherInfoData",
+    "parent": "teach",
+    "page": "classhome",
+    "alias": "class",
+    "params": {
+      "userId": "int",
+      "time": "long",
+      "sign": "String"
+    }
+  }
+]
